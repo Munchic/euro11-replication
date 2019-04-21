@@ -99,8 +99,8 @@ for (ind in 1:length(c(0, contr))){
 # get p-values for each year
 p.storage <- c()
 for (i in 1:28){
-  percentile = ecdf(abs(gaps.storage[,i]))
-  p.storage[i] <- 1-percentile(abs(gaps.storage[1,i]))
+  percentile = ecdf(-abs(gaps.storage[,i]))
+  p.storage[i] <- percentile(-abs(gaps.storage[1,i]))
 }
 
 # plotting
