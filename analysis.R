@@ -11,6 +11,7 @@
 #### load required packages
 library(Synth)
 library(lattice)
+library(xtable)
 lattice.options(default.theme = modifyList(standard.theme(color = FALSE), list(strip.background = list(col = "transparent"))))
 
 
@@ -18,8 +19,8 @@ lattice.options(default.theme = modifyList(standard.theme(color = FALSE), list(s
 rm(list=ls())
 
 #### set your working directory here (adjust the path to the files on your computer)
-dir <- "~/Desktop/FiscalGovEZ/ReplicationData/scripts"
-setwd("C:/Users/Babak/ASU/Political Science Research and Method/Kohler")
+dir <- "~/Desktop/CS112/euro11-replication/r-files"
+setwd("~/Desktop/CS112/euro11-replication")
 
 #### load dataset (adjust the path to the files on your computer)
 load("scdata.Rdata")
