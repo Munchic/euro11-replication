@@ -119,6 +119,33 @@ for (i in 2:10){
 abline(h=0, col='black', lty='dashed',lwd=2)
 abline(v=1999, col='black', lty='dotted', lwd=2)
 lines(1983:2010, gaps.storage[1,], lwd=2, col='black')
+
+
+# a variation of the plot where MSPE > 2 times MSPE of euro 11 is eliminated
+# calculate MSPE
+mspe.storage <- c()
+for (i in 1:11){
+  pre.treat <- gaps.storage[i,1:16]
+  mspe.storage[i] <- sum(pre.treat**2)/16
+}
+
+not.cutoff <- mspe.storage <= 20*mspe.storage[1]
+Ylim <- c(
+  -(.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,]))),
+  (.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,])))
+)
+plot(1983:2010, gaps.storage[1,], t='l',
+     col='black', lwd=2, main=c("Debt/GDP gaps in euro 11 and 
+                                placebo gaps in all 10 control countries"), 
+     ylab=c('Gap in Debt/GDP (percentage points, 1983-2010)'),
+     xlab=c('year'), ylim=Ylim)
+for (country in (1:11)[not.cutoff][2:sum(not.cutoff)]){
+  lines(1983:2010, gaps.storage[country,], lwd=1, col='grey')
+}
+abline(h=0, col='black', lty='dashed',lwd=2)
+abline(v=1999, col='black', lty='dotted', lwd=2)
+lines(1983:2010, gaps.storage[1,], lwd=2, col='black')
+
 ################# End of my work #####################
 
 
