@@ -19,7 +19,7 @@ lattice.options(default.theme = modifyList(standard.theme(color = FALSE), list(s
 rm(list=ls())
 
 #### set your working directory here (adjust the path to the files on your computer)
-dir <- "~/Desktop/CS112/euro11-replication/r-files"
+dir <- "~/Desktop/CS112/euro11-replication/"
 setwd("~/Desktop/CS112/euro11-replication")
 
 #### load dataset (adjust the path to the files on your computer)
