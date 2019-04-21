@@ -61,6 +61,66 @@ contr <- setdiff(contr, c(1111,2222,70,155,225,269,290,310,316,317,349,355,360,3
 #### Show countries that are available for Synthetic Greece
 country <- sort(unique(scdata$country[scdata$ccode %in% contr]))
 
+################ My work for in-space placebo tests ##############
+gaps.storage <- matrix(1:308, nrow=11, ncol=28)
+for (ind in 1:length(c(0, contr))){
+  id = c(0, contr)[ind]
+  #### Generate Synth object (debt/gdp ratio) to be used to run the analysis
+  sdata <- dataprep(foo = scdata[scdata$ccode %in% contr | scdata$country == "Euro 11",],
+                    predictors = pred,
+                    dependent = names(scdata[6]),
+                    unit.variable = "ccode",
+                    time.variable = "Year", 
+                    treatment.identifier = id,
+                    controls.identifier = setdiff(contr, c(id)), 
+                    time.predictors.prior = c(1983:1998),
+                    time.optimize.ssr = c(1983:1999),
+                    unit.names.variable = "country",
+                    time.plot = 1983:2010
+  )
+  
+  #### Run the synthetic control analysis:
+  synth.out <- synth(data.prep.obj = sdata, method = "BFGS")
+  
+  #### calculate output gaps from the results
+  gaps <- sdata$Y1plot - (sdata$Y0plot %*% synth.out$solution.w)
+  gaps.storage[ind,] <- gaps
+}
+
+# export results
+# write.csv(gaps.storage, file='placebo_test.csv')
+
+# to read matrix from 'placebo_test.csv'
+# gaps.storage <- read.csv("placebo_test.csv")
+# gaps.storage <- as.matrix(gaps.storage)
+# gaps.storage <- gaps.storage[, 2:29]
+
+
+# get p-values for each year
+p.storage <- c()
+for (i in 1:28){
+  percentile = ecdf(gaps.storage[,i])
+  p.storage[i] <- percentile(gaps.storage[1,i])
+}
+
+# plotting
+Ylim <- c(
+  -(.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,]))),
+  (.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,])))
+)
+plot(1983:2010, gaps.storage[1,], t='l',
+     col='black', lwd=2, main=c("Debt/GDP gaps in euro 11 and 
+                        placebo gaps in all 10 control countries"), 
+     ylab=c('Gap in Debt/GDP (percentage points, 1983-2010)'),
+     xlab=c('year'), ylim=Ylim)
+for (i in 2:10){
+  lines(1983:2010, gaps.storage[i,], lwd=1, col='grey')
+}
+abline(h=0, col='black', lty='dashed',lwd=2)
+abline(v=1999, col='black', lty='dotted', lwd=2)
+lines(1983:2010, gaps.storage[1,], lwd=2, col='black')
+################# End of my work #####################
+
 
 #### Generate Synth object (debt/gdp ratio) to be used to run the analysis
 sdata <- dataprep(foo = scdata[scdata$ccode %in% contr | scdata$country == "Euro 11",],
