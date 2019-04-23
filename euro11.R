@@ -105,7 +105,7 @@ for (i in 1:28){
 # plotting
 Ylim <- c(
   -(.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,]))),
-  (max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,])))
+  (.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,])))
 )
 plot(1983:2010, gaps.storage[1,], t='l',
      col='black', lwd=2, main=c("Debt/GDP gaps in euro 11 and placebo gaps in all 10 control countries"),
@@ -117,7 +117,9 @@ for (i in 2:10){
 abline(h=0, col='black', lty='dashed',lwd=2)
 abline(v=1999, col='black', lty='dotted', lwd=2)
 lines(1983:2010, gaps.storage[1,], lwd=2, col='black')
-
+legend(1985, 30, legend=c('Euro 11',
+                           'Control countries'),
+       col=c("black", "grey"), lty=c(1, 1), lwd=c(2,1),cex=0.8)
 
 # a variation of the plot where MSPE > 2 times MSPE of euro 11 is eliminated
 # calculate MSPE
@@ -130,7 +132,7 @@ for (i in 1:11){
 not.cutoff <- mspe.storage <= 20*mspe.storage[1]
 Ylim <- c(
   -(.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,]))),
-  (max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,])))
+  (.3*max(abs(gaps.storage[1,])) + max(abs(gaps.storage[1,])))
 )
 plot(1983:2010, gaps.storage[1,], t='l',
      col='black', lwd=2, main=c("Debt/GDP gaps in euro 11 and
@@ -143,6 +145,9 @@ for (country in (1:11)[not.cutoff][2:sum(not.cutoff)]){
 abline(h=0, col='black', lty='dashed',lwd=2)
 abline(v=1999, col='black', lty='dotted', lwd=2)
 lines(1983:2010, gaps.storage[1,], lwd=2, col='black')
+legend(1985, 30, legend=c('Euro 11',
+                           'Control countries'),
+       col=c("black", "grey"), lty=c(1, 1), lwd=c(2,1), cex=0.8)
 
 ################# End of my work #####################
 
