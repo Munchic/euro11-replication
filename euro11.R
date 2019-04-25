@@ -144,7 +144,7 @@ abline(h=0, col='black', lty='dashed',lwd=2)
 abline(v=1999, col='black', lty='dotted', lwd=2)
 lines(1983:2010, gaps.storage[1,], lwd=2, col='black')
 
-################# End of my work #####################
+################# End of Quang's work #####################
 
 
 
@@ -183,9 +183,12 @@ y <- dnorm(x, mean = fitted.model[1], sd = fitted.model[2])
 # set significance threshod
 alpha <- 0.05
 
+# control unit results
 plot(synth.trt.eff, synth.trt.prob, pch = 19, col = "blue",
      ylab = "Density", xlab = "Magnitude of Debt/GDP gap (percentage points)")
 lines(x,y, type = "l")
+
+# actual treatment unit results
 abline(v = act.trt, col = 'red', lwd = 1)
 abline(v = qnorm(1 - alpha, fitted.model[1], fitted.model[2]), # 95th percentile
        col = 'black', lty='dotted', lwd = 1) # one-sided test
@@ -202,24 +205,38 @@ legend(50, 0.002, legend=c(paste("ATE = ", as.character(round(act.trt, digits = 
 
 
 #### MLE for trimmed outcomes ####
+nocut.idx <- which(not.cutoff)[-1] # remove treatment unit
+nocut.idx
+synth.trt.eff.nocut <- abs(gaps.storage[nocut.idx, 28]) # 2010 "treatment" effect magnitudes for non-outlier control units 
+fitted.model2 <- mle.model(synth.trt.eff.nocut)
+synth.trt.prob.nocut <- calc.prob(fitted.model2[1], fitted.model2[2], synth.trt.eff.nocut)
+plot(density(x = synth.trt.eff.nocut, weights = synth.trt.prob.nocut))
+fitted.model2
 
-synth.trt.eff <- abs(gaps.storage[2:11, 28]) # 2010 "treatment" effect magnitudes for control units 
-fitted.model <- mle.model(synth.trt.eff)
-synth.trt.prob <- calc.prob(fitted.model[1], fitted.model[2], synth.trt.eff)
-plot(density(x = synth.trt.eff, weights = synth.trt.prob))
-fitted.model
+synth.trt.eff.nocut
+synth.trt.prob.nocut
 
-synth.trt.eff
-synth.trt.prob
+# create a sequence of numbers between 0 and 150 for magnitude scale
+x <- seq(0, 70, by = .1)
 
-# Create a sequence of numbers between 0 and 150 for magnitude scale
-x <- seq(0, 150, by = .1)
+# values of normal distribution
+y <- dnorm(x, mean = fitted.model2[1], sd = fitted.model2[2])
 
-# Values of normal distribution
-y <- dnorm(x, mean = fitted.model[1], sd = fitted.model[2])
-
-plot(synth.trt.eff, synth.trt.prob, pch = 19, col = "blue")
+# control unit results
+plot(synth.trt.eff.nocut, synth.trt.prob.nocut, pch = 19, col = "blue",
+     ylab = "Density", xlab = "Magnitude of Debt/GDP gap (percentage points)"
+     , xlim = c(0, 70), ylim = c(0, 0.03))
 lines(x,y, type = "l")
+
+abline(v = act.trt, col = 'red', lwd = 1)
+abline(v = qnorm(1 - alpha, fitted.model2[1], fitted.model2[2]), # 95th percentile
+       col = 'black', lty='dotted', lwd = 1) # one-sided test
+legend(35, 0.005, legend=c(paste("ATE = ", as.character(round(act.trt, digits = 2))),
+                           paste("alpha = ", as.character(round(alpha, digits = 2)))),
+       col=c("red", "black"), lty=c(1, 3), cex=0.8)
+
+# p-value for treatment unit = 0.657
+1 - pnorm(act.trt, fitted.model2[1], fitted.model2[2])
 
 #### End of MLE 2 ####
 
