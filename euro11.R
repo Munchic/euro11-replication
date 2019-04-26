@@ -37,9 +37,6 @@ recipient <- c("Portugal","Spain","Greece","Italy","Ireland")
 scresults <- vector(mode="list",length=11)
 names(scresults) <- c("Euro11","donor","recipient","Greece","Portugal","Spain","Ireland","Italy","robustness","deficit","general")
 
-
-
-
 #### Let's begin with defining some predictors:
 
 pred <- names(scdata)[c(#
