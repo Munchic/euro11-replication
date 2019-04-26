@@ -4,6 +4,39 @@
 ####### I run the Synthetic control analyses for the Euro 11 countries
 ########################################################################
 
+#### load required packages
+library(Synth)
+library(lattice)
+library(xtable)
+lattice.options(default.theme = modifyList(standard.theme(color = FALSE), list(strip.background = list(col = "transparent"))))
+
+
+#### clear workspace
+rm(list=ls())
+
+#### set your working directory here (adjust the path to the files on your computer)
+dir <- "~/Desktop/CS112/euro11-replication/"
+setwd("~/Desktop/CS112/euro11-replication")
+
+#### load dataset (adjust the path to the files on your computer)
+load("scdata.Rdata")
+
+
+
+#### Define aggregates we need later
+Euro12 <- c('Germany','Netherlands','Greece','Spain','Portugal','Italy',#
+            'Finland','France','Luxembourg','Belgium','Austria','Ireland')
+
+Euro17 <- c('Germany','Netherlands','Greece','Spain','Portugal','Italy','Finland','France','Luxembourg','Belgium','Austria','Ireland','Slovakia','Cyprus','Malta','Slovenia','Estonia')
+
+donor <- c("Germany","Netherlands","Belgium","Austria","Finland","France")
+
+recipient <- c("Portugal","Spain","Greece","Italy","Ireland")
+
+#### Define list element to store estimation results
+scresults <- vector(mode="list",length=11)
+names(scresults) <- c("Euro11","donor","recipient","Greece","Portugal","Spain","Ireland","Italy","robustness","deficit","general")
+
 
 
 
